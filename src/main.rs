@@ -5,25 +5,22 @@
 
 use std::env;
 
-use commands::{ls, mv, rm};
+use commands::{ls, mv::{self, MoveItemArgs}, parsable_command::{self, ParsableCommand}, rm};
 
 mod commands;
 mod args_parser;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-
-    if args.len() < 2 {
-        print!("You need to supply altleast one command");
-        return;
-    }
-
-    let first_arg: &str = args[1].as_ref();
-
-    if first_arg.is_empty() {
-        println!("First argument cannot be empty");
-        return;
-    }
+    let command_name : String;
+    let commad_args : T;
+    let parse_result = args_parser::parse_args::<MoveItemArgs>(args);
+            match parse_result {
+                Ok((cmd_name, comd_args)) => {
+                    command_name = cmd_name;
+                    
+                }
+            }
 
     // all commands
     match first_arg {
@@ -54,6 +51,8 @@ fn main() {
             let _ = rm::remove_item(second_arg);
         }
         "mv" => {
+            
+
             if args.len() < 4 {
                 println!("Please provide valid source and destination paths.");
                 return;
@@ -71,7 +70,7 @@ fn main() {
                 return;
             }
 
-            let _ = mv::move_items(second_arg, second_arg);
+            let _ = mv::move_items(command_args);
         }
         _ => println!("Invalid command supplied"),
     }

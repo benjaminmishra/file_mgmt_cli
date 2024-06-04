@@ -4,6 +4,7 @@ pub fn list_all_dir_contents(path: &str) -> Result<(), String> {
     if path.is_empty() {
         return Err("Invlaid path".to_owned());
     }
+
     let path_obj = Path::new(path);
     if path_obj.is_file() {
         return Err("Cannot list contents of a file".to_owned());
@@ -16,18 +17,13 @@ pub fn list_all_dir_contents(path: &str) -> Result<(), String> {
             for item in read_dir_instance {
                 match item {
                     Ok(dir) => println!("{}", dir.file_name().to_string_lossy()),
-                    Err(error) => {
-                        println!("failed to read dir entry error {}", error.to_string())
+                    Err(_) => {
+                        return Err("failed to read dir entry".to_owned())
                     }
                 }
             }
-        }
-        Err(err) => println!(
-            "Failed to read {} due to error {}",
-            path,
-            err.to_string()
-        ),
+            return Ok(());
+        },
+        Err(_) => return Err("Failed to read given path".to_owned())
     }
-
-    Ok(())
 }

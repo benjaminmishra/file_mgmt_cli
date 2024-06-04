@@ -12,10 +12,10 @@ pub fn remove_item(path: &str) -> Result<(), String> {
             Ok(()) => return Ok(()),
             Err(_) => return Err("Failed to delete provided dir due to Error".to_owned()),
         }
-    } else {
-        match fs::remove_file(path_ref) {
-            Ok(()) => return Ok(()),
-            Err(_) => return Err("Failed to delete provided file due to Error {}".to_owned()),
-        }
+    }
+    
+    match fs::remove_file(path_ref) {
+        Ok(()) => return Ok(()),
+        Err(_) => return Err("Failed to delete provided file due to Error {}".to_owned()),
     }
 }
